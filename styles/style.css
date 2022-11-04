@@ -4,8 +4,8 @@ body {
   }
 
   #game-board {
-    width: 500px;
-    height: 500px;
+    width: 1400px;
+    height: 700px;
     border: 1px solid black;
     margin: 0 100px 0px 200px;
   }

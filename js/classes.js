@@ -1,4 +1,4 @@
-class Sprite {
+class Animacion {
     constructor(options) {
         this.context = options.context;
         this.image = options.image; // Path to image sprite sheet
@@ -21,8 +21,43 @@ class Sprite {
                 this.frameIndex += 1;
             } else {
                 this.frameIndex = 0;
+                
             }
         }
+    }
+
+    updateWalk(){
+        let status = true;
+        if(status){
+            this.tickCount += 1;
+            if (this.tickCount > this.ticksPerFrame) {
+                this.tickCount = 0;
+                if (this.frameIndex < this.frames - 1) {
+                    this.frameIndex += 1;
+                } else {
+                    this.frameIndex = 0;
+                    status = false;
+                }
+            }
+        }
+        return status;
+    }
+
+    updateAttack(){
+        let status = true;
+        if(status){
+            this.tickCount += 1;
+            if (this.tickCount > this.ticksPerFrame) {
+                this.tickCount = 0;
+                if (this.frameIndex < this.frames - 1) {
+                    this.frameIndex += 1;
+                } else {
+                    this.frameIndex = 0;
+                    status = false;
+                }
+            }
+        }
+        return status;
     }
 
     render() {
@@ -47,7 +82,7 @@ class Background {
     /**
      * 
      * @param {number} w => canvas.width 
-     * @param {number} h 
+     * @param {number} h => canvas.height
      */
     constructor(w,h){
         //las posiciones son parte de los atributos de esta clase
@@ -61,7 +96,18 @@ class Background {
         //Image = {src:"", onload()...}
         //../ salimos un nivel
         //./ en el mismo nivel
-        this.image.src = "../images/bg.png"
+        this.image.src = "../images/Escenario-final.png"
+    }
+
+    render(){
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.heigth);
+        ctx.drawImage(
+            this.image,
+            this.x + this.width,//  coloque la imagen 2 despues de la imagen 1
+            this.y,
+            this.width,
+            this.heigth
+        )
     }
 
     //Metodo update
@@ -84,6 +130,65 @@ class Background {
             this.width,
             this.heigth
         )
+    }
+}
+
+
+class Nubes {
+    constructor(w,h){
+        this.x = 0;
+        this.y = 0;
+        this.width = w;
+        this.heigth = h;
+        this.image = new Image();
+        this.image.src = '../images/Nubes.png';
+    }
+
+    render(){
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.heigth);
+
+        ctx.drawImage(
+            this.image,
+            this.x + this.width, //Colocamos la segunda imagen despues de la primera
+            this.y,
+            this.width,
+            this.heigth
+        )
+    }
+
+    update(){
+        if(this.x < -canvas.width){
+            this.x = 0;
+        }
+        this.x --;
+
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.heigth);
+
+        ctx.drawImage(
+            this.image,
+            this.x + this.width, //Colocamos la segunda imagen despues de la primera
+            this.y,
+            this.width,
+            this.heigth
+        )
+    }
+}
+
+class Luna extends Animacion {
+    constructor(x,y,context,w,h,image){
+        super({
+            context: context,
+            image: image,
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            frameIndex: 0,
+            row: 0,
+            tickCount:0,
+            ticksPerFrame: 30,
+            frames:2
+        });
     }
 }
 
@@ -110,7 +215,7 @@ class Aguila {
     }
 }*/
 
-class Aguila extends Sprite {
+class Aguila extends Animacion {
     constructor(x,y,context,w,h,image){
         super({
             context: context,
@@ -123,12 +228,44 @@ class Aguila extends Sprite {
             row: 0,
             tickCount:0,
             ticksPerFrame: 2,
-            frames:4
+            frames:1
         });
     }
 
-    attack() {
-        this.frames = 3;
+    walk() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 8;
+        this.width = 150;
+        this.image = new Image();
+        this.image.src = '../images/walk-front.png';
+    }
+
+    walkBack() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 4;
+        this.width = 150;
+        this.image = new Image();
+        this.image.src = '../images/walk-back.png';
+    }
+
+    macuahuitl() {
+        this.frames = 4;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 4;
+        this.y = 420;
+        this.width = 150;
+        this.height = 290;
+        this.image = new Image();
+        this.image.src = '../images/macuahuitl.png';
+    }
+
+    arco(){
+        this.frames = 5;
         this.frameIndex = 0;
         this.row = 1;
         this.ticksPerFrame = 2;
