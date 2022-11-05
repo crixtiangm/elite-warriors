@@ -22,7 +22,7 @@ class Animacion {
             } else {
                 this.frameIndex = 0;
                 
-            }
+                }
         }
     }
 
@@ -216,6 +216,7 @@ class Aguila {
 }*/
 
 class Aguila extends Animacion {
+    
     constructor(x,y,context,w,h,image){
         super({
             context: context,
@@ -231,43 +232,120 @@ class Aguila extends Animacion {
             frames:1
         });
     }
+    
 
-    walk() {
+    walk(path) {
         this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
         this.ticksPerFrame = 8;
         this.width = 150;
         this.image = new Image();
-        this.image.src = '../images/walk-front.png';
+        this.image.src = path;
     }
 
-    walkBack() {
+    walkArco() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 8;
+        this.width = 150;
+        this.image = new Image();
+        this.image.src = '../images/arco-walk-front.png';
+    }
+    walkFront(path){
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 8;
+        this.width = 150;
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+    walkBack(path) {
         this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
         this.ticksPerFrame = 4;
         this.width = 150;
         this.image = new Image();
-        this.image.src = '../images/walk-back.png';
+        this.image.src = path;//'../images/walk-back.png';
     }
 
-    macuahuitl() {
-        this.frames = 4;
+    attackFront(path,w){
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = w;
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+    attackBack(path,w){
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = w;
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+    walkArcoBack() {
+        this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
         this.ticksPerFrame = 4;
-        this.y = 420;
         this.width = 150;
-        this.height = 290;
+        this.image = new Image();
+        this.image.src = '../images/arco-walk-back.png';
+    }
+
+    macuahuitl() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = 160;
         this.image = new Image();
         this.image.src = '../images/macuahuitl.png';
+    }
+
+    macuahuitlBack() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = 160;
+        this.image = new Image();
+        this.image.src = '../images/macuahuitl-back.png';
     }
 
     arco(){
         this.frames = 5;
         this.frameIndex = 0;
-        this.row = 1;
+        this.row = 0;
         this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = 240;
+        this.image = new Image();
+        this.image.src = '../images/Arco-Front.png' 
+    }
+
+    arcoBack() {
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 2;
+        this.y = 430;
+        this.width = 240;
+        this.image = new Image();
+        this.image.src = '../images/Arco-Back.png'
     }
 }

@@ -4,9 +4,8 @@ const bgImage = new Image();
 const imageLuna = new Image();
 imageLuna.src = "../images/Luna.png";
 const bg = new Background(canvas.width,canvas.height)
-const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna)
+const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
-//const aguila = new Aguila(50,394,ctx,330,235,image);
 const aguila = new Aguila(100,430,ctx,150,160,image);
 
 
@@ -15,6 +14,7 @@ window.onload = function() {
         startGame();
       };
 }
+
 
 function startGame() {
     if(!requestId){
@@ -33,10 +33,17 @@ function updateGame() {
     }
 }
 
-function attack() {
+function attackFront() {
     attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
     if(attackStatus){                     //Mientras no devuelva false se ejecutara todo el ciclo
-        requestAnimationFrame(attack);
+        requestAnimationFrame(attackFront);
+    }
+}
+
+function attackBack() {
+    attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
+    if(attackStatus){                     //Mientras no devuelva false se ejecutara todo el ciclo
+        requestAnimationFrame(attackBack);
     }
 }
 
@@ -85,16 +92,50 @@ function walkBack() {
     }
 }
 
+
 addEventListener("keydown", (event)=>{
-        if(event.keyCode === 32){
-            aguila.macuahuitl();
-            attack()
+        if(event.code === "Space"){
+            switch(keyPres){
+                case 39:
+                    aguila.attackFront(weaponImages[selectorWeapon].attackFront,weaponImages[selectorWeapon].width);
+                    attackFront()
+                    break;
+                case 37:
+                    aguila.attackBack(weaponImages[selectorWeapon].attackBack,weaponImages[selectorWeapon].width);
+                    attackBack();
+                    break;
+                default:
+                    aguila.attackFront(weaponImages[selectorWeapon].attackFront,weaponImages[selectorWeapon].width)
+                    attackFront()
+                    break;
+            }         
         }else if(event.keyCode === 39){
-            aguila.walk();
+            aguila.walk(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
             walkFront();
-        }else if(event.keyCode ===37){
-            aguila.walkBack();
+            keyPres = 39;
+        }else if(event.keyCode === 37){
+            aguila.walkBack(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
             walkBack();
+            keyPres = 37;
+        }else if(event.shiftKey){
+            selectorWeapon ++;
+            switch(selectorWeapon){
+                case 1:
+                    if(keyPres == 39){
+                        aguila.walk(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width)
+                    }else{
+                        aguila.walk(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
+                    }
+                    break;
+                default:
+                    if(keyPres == 39){
+                        aguila.walk(weaponImages[0].walkFront,weaponImages[selectorWeapon].width);
+                    }else{
+                        aguila.walk(weaponImages[0].walkBack,weaponImages[selectorWeapon].width);
+                    }
+                    selectorWeapon = 0;
+                    break;
+            }
         }
   })
 
