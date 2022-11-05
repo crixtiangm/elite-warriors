@@ -6,7 +6,7 @@ imageLuna.src = "../images/Luna.png";
 const bg = new Background(canvas.width,canvas.height)
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
-const aguila = new Aguila(100,430,ctx,150,160,image);
+const aguila = new Aguila(-100,430,ctx,379,160,image);
 
 
 window.onload = function() {
@@ -51,14 +51,14 @@ function walkFront() {
     walkStatus = aguila.updateWalk();
     if(walkStatus){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        if(aguila.x >= canvas.width/2){
+        if(aguila.x >= canvas.width/3){
         bg.update();
         bgLuna.render();
         bgNubes.update();
         aguila.render();
         requestAnimationFrame(walkFront);
-        aguila.x = canvas.width/2;
-        }else if(aguila.x < canvas.width/2){
+        aguila.x = canvas.width/3;
+        }else if(aguila.x < canvas.width/3){
             bg.render();
             bgLuna.render();
             bgNubes.render();
@@ -75,13 +75,13 @@ function walkBack() {
     walkStatus = aguila.updateWalk();
     if(walkStatus){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        if(aguila.x > 0){
-        bg.render();
-        bgLuna.render();
-        bgNubes.render();
-        aguila.render();
-        requestAnimationFrame(walkBack);
-        aguila.x --;
+        if(aguila.x > -100){
+            bg.render();
+            bgLuna.render();
+            bgNubes.render();
+            aguila.render();
+            requestAnimationFrame(walkBack);
+            aguila.x --;
         }else if(aguila.x <= 0){
             bg.render();
             bgLuna.render();
@@ -110,7 +110,7 @@ addEventListener("keydown", (event)=>{
                     break;
             }         
         }else if(event.keyCode === 39){
-            aguila.walk(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
+            aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
             walkFront();
             keyPres = 39;
         }else if(event.keyCode === 37){
@@ -119,21 +119,29 @@ addEventListener("keydown", (event)=>{
             keyPres = 37;
         }else if(event.shiftKey){
             selectorWeapon ++;
+            console.log(selectorWeapon)
             switch(selectorWeapon){
                 case 1:
                     if(keyPres == 39){
-                        aguila.walk(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width)
+                        aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width)
                     }else{
-                        aguila.walk(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
+                        aguila.walkFront(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
+                    }
+                    break;
+                case 2:
+                    if(keyPres == 39){
+                        aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width)
+                    }else{
+                        aguila.walkFront(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
                     }
                     break;
                 default:
-                    if(keyPres == 39){
-                        aguila.walk(weaponImages[0].walkFront,weaponImages[selectorWeapon].width);
-                    }else{
-                        aguila.walk(weaponImages[0].walkBack,weaponImages[selectorWeapon].width);
-                    }
                     selectorWeapon = 0;
+                    if(keyPres == 39){
+                        aguila.walkFront(weaponImages[0].walkFront,weaponImages[selectorWeapon].width);
+                    }else{
+                        aguila.walkFront(weaponImages[0].walkBack,weaponImages[selectorWeapon].width);
+                    }
                     break;
             }
         }

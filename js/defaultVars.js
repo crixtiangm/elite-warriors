@@ -16,18 +16,19 @@ let weaponImages = [{
     walkBack: '../images/walk-back.png',
     attackFront: '../images/macuahuitl.png',
     attackBack: '../images/macuahuitl-back.png',
-    width: 160
+    width: 379
 },
 {
     walkFront: '../images/arco-walk-front.png',
     walkBack: '../images/arco-walk-back.png',
     attackFront: '../images/Arco-Front.png',
     attackBack: '../images/Arco-Back.png',
-    width: 240
+    width: 379
 },
 {
-    WalkFront: '',
-    WalkBack: '',
-    AttackFront: '',
-    AttackBack: ''
+    walkFront: '../images/lanza-walk-front.png',
+    walkBack: '../images/lanza-walk-back.png',
+    attackFront: '../images/attack-lanza-front.png',
+    attackBack: '../images/attack-lanza-back.png',
+    width:379
 }];

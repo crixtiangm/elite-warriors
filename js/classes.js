@@ -192,28 +192,6 @@ class Luna extends Animacion {
     }
 }
 
-/*
-class Aguila {
-    constructor(x,y,w,h){
-        this.x = x;
-        this.y = y;
-        this.width = w;
-        this.height = h;
-        // Image 
-        this.image = new Image();
-        this.image.src = "../images/Guerrero-Aguila.png"
-    }
-
-    update(){
-        ctx.drawImage(
-            this.image,
-            this.x,
-            this.y,
-            this.width,
-            this.height
-        )
-    }
-}*/
 
 class Aguila extends Animacion {
     
@@ -233,32 +211,12 @@ class Aguila extends Animacion {
         });
     }
     
-
-    walk(path) {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 8;
-        this.width = 150;
-        this.image = new Image();
-        this.image.src = path;
-    }
-
-    walkArco() {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 8;
-        this.width = 150;
-        this.image = new Image();
-        this.image.src = '../images/arco-walk-front.png';
-    }
     walkFront(path){
         this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
         this.ticksPerFrame = 8;
-        this.width = 150;
+        this.width = 379;
         this.image = new Image();
         this.image.src = path;
     }
@@ -268,9 +226,9 @@ class Aguila extends Animacion {
         this.frameIndex = 0;
         this.row = 0;
         this.ticksPerFrame = 4;
-        this.width = 150;
+        this.width = 379;
         this.image = new Image();
-        this.image.src = path;//'../images/walk-back.png';
+        this.image.src = path;
     }
 
     attackFront(path,w){
@@ -295,57 +253,4 @@ class Aguila extends Animacion {
         this.image.src = path;
     }
 
-    walkArcoBack() {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 4;
-        this.width = 150;
-        this.image = new Image();
-        this.image.src = '../images/arco-walk-back.png';
-    }
-
-    macuahuitl() {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 2;
-        this.y = 430;
-        this.width = 160;
-        this.image = new Image();
-        this.image.src = '../images/macuahuitl.png';
-    }
-
-    macuahuitlBack() {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 2;
-        this.y = 430;
-        this.width = 160;
-        this.image = new Image();
-        this.image.src = '../images/macuahuitl-back.png';
-    }
-
-    arco(){
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 2;
-        this.y = 430;
-        this.width = 240;
-        this.image = new Image();
-        this.image.src = '../images/Arco-Front.png' 
-    }
-
-    arcoBack() {
-        this.frames = 5;
-        this.frameIndex = 0;
-        this.row = 0;
-        this.ticksPerFrame = 2;
-        this.y = 430;
-        this.width = 240;
-        this.image = new Image();
-        this.image.src = '../images/Arco-Back.png'
-    }
 }
