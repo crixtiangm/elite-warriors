@@ -21,7 +21,6 @@ class Animacion {
                 this.frameIndex += 1;
             } else {
                 this.frameIndex = 0;
-                
                 }
         }
     }
@@ -242,7 +241,7 @@ class Aguila extends Animacion {
         this.image.src = path;
     }
 
-    attackBack(path,w){
+    attackBack(path,w,damage){
         this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
@@ -252,5 +251,73 @@ class Aguila extends Animacion {
         this.image = new Image();
         this.image.src = path;
     }
+}
 
+
+class Arrow {
+    constructor(x,y,path,damage){
+        this.x = x;
+        this.y = y;
+        this.width = 170;
+        this.height = 32;
+        this.path = path;
+        this.damage = damage;
+        this.image = new Image();
+        this.image.src = this.path;
+    }
+
+    updateArrowFront(){
+        this.x += 3;
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+
+    updateArrowBack(){
+        this.x -= 3;
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+
+}
+
+class Spears {
+    constructor(x,y,path,damage){
+        this.x = x;
+        this.y = y;
+        this.width = 170;
+        this.height = 32;
+        this.path = path;
+        this.damage = damage;
+        this.image = new Image();
+        this.image.src = this.path;
+    }
+
+    updateSpearFront(){
+        this.x += 3;
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+
+    updateSpearBack(){
+        this.x -= 3;
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+}
+
+class Macuahuitl {
+    constructor(x,y,path,damage){
+        this.x = x;
+        this.y = y;
+        this.width = 170;
+        this.height = 32;
+        this.path = path;
+        this.damage = damage;
+        this.image = new Image();
+        this.image.src = this.path;
+    }
+
+    updateMacuahuitlFront(){
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+
+    updateMacuahuitlBack(){
+        ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
 }
