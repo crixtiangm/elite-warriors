@@ -45,7 +45,8 @@ function updateGame() {
     if(arrMacuahuitlBack.length > 1){
         drawMacuahuitlBack();
     }
-    console.log("me estoy ejecutando")
+    generaEnemies();
+    drawEnemies();
     if(requestId){
         requestAnimationFrame(updateGame);
     }
@@ -71,7 +72,7 @@ function generaArrowFront(){
 }
 
 function generaSpearFront(){
-    const spearFront = new Spears(aguila.x + 170, aguila.y + 23, "../images/lanza-front.png",40)
+    const spearFront = new Spears(aguila.x + 170, aguila.y + 22, "../images/lanza-front.png",40)
     arrSpearFront.push(spearFront);
 }
 
@@ -79,6 +80,7 @@ function generaMacuahuitlFront(){
     const macuahuitlFront = new Macuahuitl(aguila.x + 180, aguila.y + 50, "../images/macuahuitl-front.png", 50)
     arrMacuahuitlFront.push(macuahuitlFront);
 }
+
 
 function drawArrowFront(){
     arrArrowFront.forEach((flecha, flecha_index )=>{
@@ -112,17 +114,20 @@ function generaArrowBack(){
     arrArrowBack.push(arrowBack);
 }
 
+function generaArrowBackEnemy(enemie){
+    const arrowEnemyBack = new Arrow(enemie.x-100,enemie.y + 42,"../images/arrow-enemy.png",40);
+    arrArrowEnemy.push(arrowEnemyBack);
+}
+
 function generaSpearBack(){
     const spearFront = new Spears(aguila.x + 30, aguila.y + 23, "../images/lanza-back.png",40)
     arrSpearBack.push(spearFront);
 }
 
 function generaMacuahuitlBack(){
-    const macuahuitlBack = new Macuahuitl(aguila.x + 40, aguila.y + 50, "../images/macuahuitl-back-attack.png", 50)
+    const macuahuitlBack = new Macuahuitl(aguila.x + 30, aguila.y + 50, "../images/macuahuitl-back-attack.png", 50)
     arrMacuahuitlBack.push(macuahuitlBack);
-    console.log("Macuahuitl aqui estoy")
-    console.table(arrMacuahuitlBack)
-}
+} 
 
 function drawArrowBack(){
     arrArrowBack.forEach((flecha, flecha_index) => {
@@ -151,11 +156,59 @@ function drawMacuahuitlBack(){
     })
 }
 
+function drawArrowBackEnemy(){
+    arrArrowEnemy.forEach((flecha, flecha_index) => {
+        if(flecha.x < -100){
+            arrArrowBack.splice(flecha_index,1);
+        }
+        flecha.updateArrowBack();
+    })
+}
+
+
+//Vamos a generar enemigos
+
+function generaEnemies(){
+    if((frames % 100 === 0) && statusEnemies){
+        const enemyImg = new Image();
+        enemyImg.src =  "../images/enemy-walk.png";
+        let health = Math.floor(Math.random()*200);
+        const enemie = new Enemy(canvas.width,485,ctx,380,100,enemyImg,health);
+        arrEnemies.push(enemie);
+      } 
+      return true;
+}
+
+
+//Dibujamos a los enemigos
+function drawEnemies(){
+    arrEnemies.forEach((enemie, enemie_index)=> {
+        if(enemie.x < -250 || enemie.health < 0){
+            arrEnemies.splice(enemie_index,1)
+        }
+        let count = enemie.render();
+        if(count < 300){
+            enemie.walk("../images/enemy-walk.png");
+            enemie.update();
+            drawArrowBackEnemy();
+        }else{
+            enemie.attack("../images/enemigo-arco.png");
+            enemie.update();
+            if(count >= 323 && count < 324){
+            generaArrowBackEnemy(enemie);
+            }
+            drawArrowBackEnemy();
+            console.log(count)
+        }
+    })
+}
+
+
 function walkFront() {
     walkStatus = aguila.updateWalk();
     if(walkStatus){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        if(aguila.x >= canvas.width/3){
+        if(aguila.x >= canvas.width/3.5){
             bg.update();
             bgLuna.render();
             bgNubes.update();
@@ -166,9 +219,10 @@ function walkFront() {
             if(arrSpearFront.length > 0){
                 drawSpearFront();
             }
+            drawEnemies();
             requestAnimationFrame(walkFront);
-            aguila.x = canvas.width/3;
-        }else if(aguila.x < canvas.width/3){
+            aguila.x = canvas.width/3.5;
+        }else if(aguila.x < canvas.width/3.5){
             ctx.clearRect(0,0,canvas.width,canvas.height);
             bg.render();
             bgLuna.render();
@@ -180,15 +234,17 @@ function walkFront() {
             if(arrSpearFront.length > 0){
                 drawSpearFront();
             }
+            drawEnemies();
             requestAnimationFrame(walkFront);
             aguila.x ++;
         }   
     }
+    
 }
 
 function walkBack() {
-    walkStatus = aguila.updateWalk();
-    if(walkStatus){
+    walkBackStatus = aguila.updateWalk();
+    if(walkBackStatus){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if(aguila.x > -100){
             bg.render();
@@ -201,6 +257,7 @@ function walkBack() {
             if(arrSpearBack.length > 0){
                 drawSpearBack();
             }
+            drawEnemies();
             requestAnimationFrame(walkBack);
             aguila.x --;
         }else if(aguila.x <= 0){
@@ -214,6 +271,7 @@ function walkBack() {
             if(arrSpearBack.length > 0){
                 drawSpearBack();
             }
+            drawEnemies();
             requestAnimationFrame(walkBack);
         }
     }
@@ -257,11 +315,21 @@ addEventListener("keydown", (event)=>{
             }         
         }else if(event.keyCode === 39){
             aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
+            if(!walkStatus){
             walkFront();
+            }
+            if(arrEnemies.length < 5){
+                statusEnemies = true;
+            }else {
+                statusEnemies = false;
+                console.log(arrEnemies.length)
+            }
             keyPres = 39;
         }else if(event.keyCode === 37){
             aguila.walkBack(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
-            walkBack();
+            if(!walkBackStatus){
+                walkBack();
+            }
             keyPres = 37;
         }else if(event.shiftKey){
             selectorWeapon ++;
@@ -293,7 +361,7 @@ addEventListener("keydown", (event)=>{
   })
 
 addEventListener("keyup", (event)=>{
-    if(event.keyCode === 32){
-       //aguila.walk()
+    if(event.keyCode === 39){
+       statusEnemies = false;
     }
   })

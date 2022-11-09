@@ -241,7 +241,7 @@ class Aguila extends Animacion {
         this.image.src = path;
     }
 
-    attackBack(path,w,damage){
+    attackBack(path,w){
         this.frames = 5;
         this.frameIndex = 0;
         this.row = 0;
@@ -250,6 +250,91 @@ class Aguila extends Animacion {
         this.width = w;
         this.image = new Image();
         this.image.src = path;
+    }
+}
+
+class Enemy {
+    constructor(x,y,context,w,h,image,health){
+            this.context = context;
+            this.image = image;
+            this.x = x;
+            this.y = y;
+            this.width = w;
+            this.height = h;
+            this.frameIndex = 0;
+            this.row = 0;
+            this.tickCount = 0;
+            this.ticksPerFrame = 4;
+            this.frames = 5;
+            this.health = health;
+            this.count = 0;
+    }
+
+    walk(path){
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+    attack(path){
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+
+    update(){
+        let status = true;
+        if(status){
+            this.tickCount += 1;
+            if (this.tickCount > this.ticksPerFrame) {
+                this.tickCount = 0;
+                if (this.frameIndex < this.frames - 1) {
+                    this.frameIndex += 1;
+                } else {
+                    this.frameIndex = 0;
+                    status = false;
+                }
+            }
+        }
+        return status;
+    }
+
+    render(){
+        this.count ++;
+        if(this.count < 300){
+        this.x --;
+        this.context.drawImage(
+            this.image,
+            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
+            this.row * this.height, // The y-axis coordinate of the top left corner
+            this.width, // The width of the sub-rectangle
+            this.height, // The height of the sub-rectangle
+            this.x, // The x coordinate
+            this.y,// The y coordinate
+            this.width, // The width to draw the image
+            this.height // The width to draw the image
+        );
+        }else if(this.count >= 300 && this.count < 325){
+            this.context.drawImage(
+                this.image,
+                this.frameIndex * this.width, // The x-axis coordinate of the top left corner
+                this.row * this.height, // The y-axis coordinate of the top left corner
+                this.width, // The width of the sub-rectangle
+                this.height, // The height of the sub-rectangle
+                this.x, // The x coordinate
+                this.y,// The y coordinate
+                this.width, // The width to draw the image
+                this.height // The width to draw the image
+            );
+            
+        }else{
+            this.count = 0;
+        }
+        return this.count;
+    }
+
+    myHealth(attack, health){
+        health = this.health - attack;
+        return health;
     }
 }
 
@@ -267,12 +352,12 @@ class Arrow {
     }
 
     updateArrowFront(){
-        this.x += 3;
+        this.x += 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
     }
 
     updateArrowBack(){
-        this.x -= 3;
+        this.x -= 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
     }
 
@@ -291,12 +376,12 @@ class Spears {
     }
 
     updateSpearFront(){
-        this.x += 3;
+        this.x += 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
     }
 
     updateSpearBack(){
-        this.x -= 3;
+        this.x -= 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
     }
 }

@@ -11,11 +11,18 @@ let arrSpearBack = [];
 let arrMacuahuitlFront = [];
 let arrMacuahuitlBack = [];
 
+let arrEnemies = [];
+let arrArrowEnemy = [];
+let statusEnemies = false;
+
+let positionJugador;
+
 
 //Variables para caminar y atacar
 
 let attackStatus = true; //Variable para el estatus del ataque
-let walkStatus = true; //Variabel que inica la accion del personaje
+let walkStatus = false; //Variabel que inica la accion del personaje
+let walkBackStatus = false;
 let keyPres = 39; //Variable que inicia el juego atacando hacia delante
 
 let selectorWeapon = 0;
