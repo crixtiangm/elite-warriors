@@ -59,6 +59,23 @@ class Animacion {
         return status;
     }
 
+    updateSkip(){
+        let status = true;
+        if(status){
+            this.tickCount += 1;
+            if (this.tickCount > this.ticksPerFrame) {
+                this.tickCount = 0;
+                if (this.frameIndex < this.frames - 1) {
+                    this.frameIndex += 1;
+                } else {
+                    this.frameIndex = 0;
+                    status = false;
+                }
+            }
+        }
+        return status;
+    }
+
     render() {
         this.context.drawImage(
             this.image,
@@ -208,6 +225,8 @@ class Aguila extends Animacion {
             ticksPerFrame: 2,
             frames:1
         });
+        this.vy = 2 //gravity
+        this.userPull = 0;
     }
     
     walkFront(path){
@@ -250,6 +269,71 @@ class Aguila extends Animacion {
         this.width = w;
         this.image = new Image();
         this.image.src = path;
+    }
+
+    skip(path,w){
+        this.frames = 5;
+        this.frameIndex = 0;
+        this.row = 0;
+        this.ticksPerFrame = 3;
+        this.y = 430;
+        this.width = w;
+        this.image = new Image();
+        this.image.src = path;
+    }
+
+    renderSkip(){
+        this.vy = this.vy + (gravity - this.userPull);
+        //validamos si el Flappy no salga de canvas
+        if(this.y >= 430){
+            this.userPull = 0;
+            this.y = 428;
+            this.vy = 2;
+        }
+        this.y -= this.vy;
+        //modificar su "Y" con la gravedad
+        /* if(this.y <= 380){
+            this.y += this.vy;
+        } */
+
+        this.context.drawImage(
+            this.image,
+            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
+            this.row * this.height, // The y-axis coordinate of the top left corner
+            this.width, // The width of the sub-rectangle
+            this.height, // The height of the sub-rectangle
+            this.x, // The x coordinate
+            this.y,// The y coordinate
+            this.width, // The width to draw the image
+            this.height // The width to draw the image
+        );
+    }
+
+    renderSkipDown(){
+        this.vy = this.vy + (gravity - this.userPull);
+        //validamos si el Flappy no salga de canvas
+        if(this.y >= 430){
+            this.userPull = 0;
+            this.y = 428;
+            this.vy = 2;
+        }
+        this.y += this.vy;
+        //modificar su "Y" con la gravedad
+        /* if(this.y <= 380){
+            this.y += this.vy;
+        } */
+
+        this.context.drawImage(
+            this.image,
+            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
+            this.row * this.height, // The y-axis coordinate of the top left corner
+            this.width, // The width of the sub-rectangle
+            this.height, // The height of the sub-rectangle
+            this.x, // The x coordinate
+            this.y,// The y coordinate
+            this.width, // The width to draw the image
+            this.height // The width to draw the image
+        );
     }
 }
 

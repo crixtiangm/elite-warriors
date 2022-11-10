@@ -4,30 +4,34 @@ const ctx = canvas.getContext('2d');
 let frames = 0;
 let requestId;
 
-let arrArrowFront = [];
-let arrArrowBack = [];
-let arrSpearFront = [];
-let arrSpearBack = [];
-let arrMacuahuitlFront = [];
-let arrMacuahuitlBack = [];
+const arrArrowFront = [];
+const arrArrowBack = [];
+const arrSpearFront = [];
+const arrSpearBack = [];
+const arrMacuahuitlFront = [];
+const arrMacuahuitlBack = [];
 
-let arrEnemies = [];
-let arrArrowEnemy = [];
+const arrEnemies = [];
+const arrArrowEnemy = [];
 let statusEnemies = false;
 
 let positionJugador;
 
+const gravity = 0.1;
 
 //Variables para caminar y atacar
 
 let attackStatus = true; //Variable para el estatus del ataque
+let skipStatus = true; //variable para el estatus del salto
 let walkStatus = false; //Variabel que inica la accion del personaje
 let walkBackStatus = false;
 let keyPres = 39; //Variable que inicia el juego atacando hacia delante
 
 let selectorWeapon = 0;
 
-let weaponImages = [{
+let statusSkip = false;
+
+const weaponImages = [{
     walkFront: '../images/walk-front.png',
     walkBack: '../images/walk-back.png',
     attackFront: '../images/macuahuitl.png',
@@ -39,7 +43,8 @@ let weaponImages = [{
         damage:50,
         macuahuitlFront: "../images/macuahuitl-front.png",
         macuahuitlBack: "../images/macuahuitl-back-attack.png"
-    }
+    },
+    skipFront: "../images/salto-macuahuitl.png"
 },
 {
     walkFront: '../images/arco-walk-front.png',
@@ -53,7 +58,8 @@ let weaponImages = [{
         damage: 30,
         arrowFront:"../images/flecha-front.png",
         arrowBack: "../images/flecha-back.png"
-    }
+    },
+    skipFront: '../images/salto-arco.png'
 },
 {
     walkFront: '../images/lanza-walk-front.png',
@@ -66,5 +72,6 @@ let weaponImages = [{
         height: 32,
         spearFront:"../images/lanza-front.png",
         spearBack:"../images/lanza-back.png"
-    }
+    },
+    skipFront: '../images/salto-lanza.png'
 }];

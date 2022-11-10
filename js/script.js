@@ -115,7 +115,7 @@ function generaArrowBack(){
 }
 
 function generaArrowBackEnemy(enemie){
-    const arrowEnemyBack = new Arrow(enemie.x-100,enemie.y + 42,"../images/arrow-enemy.png",40);
+    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 42,"../images/arrow-enemy.png",40);
     arrArrowEnemy.push(arrowEnemyBack);
 }
 
@@ -198,7 +198,6 @@ function drawEnemies(){
             generaArrowBackEnemy(enemie);
             }
             drawArrowBackEnemy();
-            console.log(count)
         }
     })
 }
@@ -277,6 +276,29 @@ function walkBack() {
     }
 }
 
+function skipFront(){
+    skipStatus = aguila.updateSkip();
+    if(skipStatus){
+        requestAnimationFrame(skipFront)
+    }
+}
+
+async function skipDown(){
+    aguila.renderSkipDown();
+    if(aguila.y < 430){
+        requestAnimationFrame(skipDown);
+    }
+    return true;
+}
+
+function skipUp(){
+    aguila.renderSkip();
+    if(aguila.y > 320){
+        requestAnimationFrame(skipUp);
+    }else{
+        skipDown();
+    }   
+}
 
 addEventListener("keydown", (event)=>{
         if(event.code === "Space"){
@@ -313,6 +335,8 @@ addEventListener("keydown", (event)=>{
                     attackFront()
                     break;
             }         
+        }else if(event.keyCode === 40){
+            skipDown();
         }else if(event.keyCode === 39){
             aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
             if(!walkStatus){
@@ -325,6 +349,11 @@ addEventListener("keydown", (event)=>{
                 console.log(arrEnemies.length)
             }
             keyPres = 39;
+        }else if(event.keyCode === 38){
+            aguila.skip(weaponImages[selectorWeapon].skipFront,weaponImages[selectorWeapon].width);
+            skipFront();
+            aguila.userPull = 0.3
+            skipUp();
         }else if(event.keyCode === 37){
             aguila.walkBack(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
             if(!walkBackStatus){
@@ -363,5 +392,7 @@ addEventListener("keydown", (event)=>{
 addEventListener("keyup", (event)=>{
     if(event.keyCode === 39){
        statusEnemies = false;
+    }else if(event.keyCode === 38){
+        
     }
   })
