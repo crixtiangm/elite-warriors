@@ -6,7 +6,7 @@ imageLuna.src = "../images/Luna.png";
 const bg = new Background(canvas.width,canvas.height)
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
-const aguila = new Aguila(-100,430,ctx,379,160,image);
+const aguila = new Aguila(-100,430,ctx,379,160,image,200);
 
 window.onload = function() {
     document.getElementById("start-button").onclick = function() {
@@ -39,30 +39,44 @@ function updateGame() {
     if(arrSpearBack.length > 0){
         drawSpearBack();
     }
-    if(arrMacuahuitlFront.length > 1){
-            drawMacuahuitlFront();
+    if(arrMacuahuitlFront.length > 0){
+        drawMacuahuitlFront();
     } 
-    if(arrMacuahuitlBack.length > 1){
+    if(arrMacuahuitlBack.length > 0){
         drawMacuahuitlBack();
     }
     generaEnemies();
-    drawEnemies();
+    if(arrEnemies.length > 0){
+        drawEnemies();
+    } 
+    if(arrArrowEnemy.length > 0){
+        drawArrowBackEnemy();
+    }
     if(requestId){
         requestAnimationFrame(updateGame);
     }
 }
 
+function gameOver(){
+    console.log("Se murio")
+    requestId = undefined;
+}
+
 function attackFront() {
     attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
     if(attackStatus){                    //Mientras no devuelva false se ejecutara todo el ciclo              
-        requestAnimationFrame(attackFront);
+        if(requestId){
+            requestAnimationFrame(attackFront);
+        }
     }
 }
 
 function attackBack() {
     attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
     if(attackStatus){                     //Mientras no devuelva false se ejecutara todo el ciclo
-        requestAnimationFrame(attackBack);
+        if(requestId){
+            requestAnimationFrame(attackBack);
+        }
     }
 }
 
@@ -159,10 +173,22 @@ function drawMacuahuitlBack(){
 function drawArrowBackEnemy(){
     arrArrowEnemy.forEach((flecha, flecha_index) => {
         if(flecha.x < -100){
-            arrArrowBack.splice(flecha_index,1);
+            arrArrowEnemy.splice(flecha_index,1);
         }
-        flecha.updateArrowBack();
+        if(aguila.collision(flecha)){
+            arrArrowEnemy.splice(flecha_index,1);
+            let daño = aguila.daño(flecha.damage)
+            if(daño <= 0){
+                gameOver()
+            }else{
+                console.log(daño);
+            }
+        }else{
+            flecha.updateArrowBack();
+        }
+        
     })
+    console.log(statusCollition);
 }
 
 
@@ -172,7 +198,7 @@ function generaEnemies(){
     if((frames % 100 === 0) && statusEnemies){
         const enemyImg = new Image();
         enemyImg.src =  "../images/enemy-walk.png";
-        let health = Math.floor(Math.random()*200);
+        let health = Math.floor(Math.random()*150);
         const enemie = new Enemy(canvas.width,485,ctx,380,100,enemyImg,health);
         arrEnemies.push(enemie);
       } 
@@ -190,14 +216,14 @@ function drawEnemies(){
         if(count < 300){
             enemie.walk("../images/enemy-walk.png");
             enemie.update();
-            drawArrowBackEnemy();
+            //drawArrowBackEnemy();
         }else{
             enemie.attack("../images/enemigo-arco.png");
             enemie.update();
             if(count >= 323 && count < 324){
             generaArrowBackEnemy(enemie);
             }
-            drawArrowBackEnemy();
+            //drawArrowBackEnemy();
         }
     })
 }
@@ -218,8 +244,15 @@ function walkFront() {
             if(arrSpearFront.length > 0){
                 drawSpearFront();
             }
-            drawEnemies();
-            requestAnimationFrame(walkFront);
+            if(arrEnemies.length > 0){
+                drawEnemies();
+            } 
+            if(arrArrowEnemy.length > 0){
+                drawArrowBackEnemy();
+            }
+            if(requestId){
+                requestAnimationFrame(walkFront);
+            }
             aguila.x = canvas.width/3.5;
         }else if(aguila.x < canvas.width/3.5){
             ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -233,8 +266,15 @@ function walkFront() {
             if(arrSpearFront.length > 0){
                 drawSpearFront();
             }
-            drawEnemies();
-            requestAnimationFrame(walkFront);
+            if(arrEnemies.length > 0){
+                drawEnemies();
+            } 
+            if(arrArrowEnemy.length > 0){
+                drawArrowBackEnemy();
+            }
+            if(requestId){
+                requestAnimationFrame(walkFront);
+            }
             aguila.x ++;
         }   
     }
@@ -256,8 +296,15 @@ function walkBack() {
             if(arrSpearBack.length > 0){
                 drawSpearBack();
             }
-            drawEnemies();
-            requestAnimationFrame(walkBack);
+            if(arrEnemies.length > 0){
+                drawEnemies();
+            } 
+            if(arrArrowEnemy.length > 0){
+                drawArrowBackEnemy();
+            }
+            if(requestId){
+                requestAnimationFrame(walkBack);
+            }
             aguila.x --;
         }else if(aguila.x <= 0){
             bg.render();
@@ -270,8 +317,15 @@ function walkBack() {
             if(arrSpearBack.length > 0){
                 drawSpearBack();
             }
-            drawEnemies();
-            requestAnimationFrame(walkBack);
+            if(arrEnemies.length > 0){
+                drawEnemies();
+            } 
+            if(arrArrowEnemy.length > 0){
+                drawArrowBackEnemy();
+            }
+            if(requestId){
+                requestAnimationFrame(walkBack);
+            }
         }
     }
 }
@@ -279,22 +333,27 @@ function walkBack() {
 function skipFront(){
     skipStatus = aguila.updateSkip();
     if(skipStatus){
-        requestAnimationFrame(skipFront)
+        if(requestId){
+            requestAnimationFrame(skipFront)
+        }
     }
 }
 
-async function skipDown(){
+function skipDown(){
     aguila.renderSkipDown();
     if(aguila.y < 430){
-        requestAnimationFrame(skipDown);
+        if(requestId){
+            requestAnimationFrame(skipDown);
+        }
     }
-    return true;
 }
 
 function skipUp(){
     aguila.renderSkip();
-    if(aguila.y > 320){
-        requestAnimationFrame(skipUp);
+    if(aguila.y > 240){
+        if(requestId){
+            requestAnimationFrame(skipUp);
+        }
     }else{
         skipDown();
     }   
@@ -335,8 +394,6 @@ addEventListener("keydown", (event)=>{
                     attackFront()
                     break;
             }         
-        }else if(event.keyCode === 40){
-            skipDown();
         }else if(event.keyCode === 39){
             aguila.walkFront(weaponImages[selectorWeapon].walkFront,weaponImages[selectorWeapon].width);
             if(!walkStatus){
@@ -352,7 +409,7 @@ addEventListener("keydown", (event)=>{
         }else if(event.keyCode === 38){
             aguila.skip(weaponImages[selectorWeapon].skipFront,weaponImages[selectorWeapon].width);
             skipFront();
-            aguila.userPull = 0.3
+            aguila.userPull = 0.1;
             skipUp();
         }else if(event.keyCode === 37){
             aguila.walkBack(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
@@ -392,7 +449,5 @@ addEventListener("keydown", (event)=>{
 addEventListener("keyup", (event)=>{
     if(event.keyCode === 39){
        statusEnemies = false;
-    }else if(event.keyCode === 38){
-        
     }
   })

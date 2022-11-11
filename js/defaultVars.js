@@ -31,6 +31,8 @@ let selectorWeapon = 0;
 
 let statusSkip = false;
 
+let statusCollition = 0;
+
 const weaponImages = [{
     walkFront: '../images/walk-front.png',
     walkBack: '../images/walk-back.png',

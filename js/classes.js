@@ -211,7 +211,7 @@ class Luna extends Animacion {
 
 class Aguila extends Animacion {
     
-    constructor(x,y,context,w,h,image){
+    constructor(x,y,context,w,h,image,health){
         super({
             context: context,
             image: image,
@@ -227,6 +227,7 @@ class Aguila extends Animacion {
         });
         this.vy = 2 //gravity
         this.userPull = 0;
+        this.health = health;
     }
     
     walkFront(path){
@@ -284,7 +285,7 @@ class Aguila extends Animacion {
 
     renderSkip(){
         this.vy = this.vy + (gravity - this.userPull);
-        //validamos si el Flappy no salga de canvas
+        
         if(this.y >= 430){
             this.userPull = 0;
             this.y = 428;
@@ -292,9 +293,6 @@ class Aguila extends Animacion {
         }
         this.y -= this.vy;
         //modificar su "Y" con la gravedad
-        /* if(this.y <= 380){
-            this.y += this.vy;
-        } */
 
         this.context.drawImage(
             this.image,
@@ -334,6 +332,20 @@ class Aguila extends Animacion {
             this.width, // The width to draw the image
             this.height // The width to draw the image
         );
+    }
+
+    daño(damage){
+        this.health = this.health - damage;
+        return this.health;
+    }
+
+    collision(item){
+        return(
+            this.x + 160 < (item.x + 35) + item.width/2 &&
+            this.x + 170 > (item.x + 35) &&
+            this.y < item.y + item.height &&
+            this.y + this.height > item.y
+            )   
     }
 }
 
@@ -444,7 +456,6 @@ class Arrow {
         this.x -= 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
     }
-
 }
 
 class Spears {
