@@ -39,10 +39,10 @@ function updateGame() {
     if(arrSpearBack.length > 0){
         drawSpearBack();
     }
-    if(arrMacuahuitlFront.length > 0){
+    if(arrMacuahuitlFront.length > 1){
         drawMacuahuitlFront();
     } 
-    if(arrMacuahuitlBack.length > 0){
+    if(arrMacuahuitlBack.length > 1){
         drawMacuahuitlBack();
     }
     generaEnemies();
@@ -129,7 +129,7 @@ function generaArrowBack(){
 }
 
 function generaArrowBackEnemy(enemie){
-    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 42,"../images/arrow-enemy.png",40);
+    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 62,"../images/arrow-enemy.png",40);
     arrArrowEnemy.push(arrowEnemyBack);
 }
 
@@ -197,9 +197,9 @@ function drawArrowBackEnemy(){
 function generaEnemies(){
     if((frames % 100 === 0) && statusEnemies){
         const enemyImg = new Image();
-        enemyImg.src =  "../images/enemy-walk.png";
+        enemyImg.src =  "../images/enemy-walk_v2.png";
         let health = Math.floor(Math.random()*150);
-        const enemie = new Enemy(canvas.width,485,ctx,380,100,enemyImg,health);
+        const enemie = new Enemy(canvas.width,455,ctx,380,130,enemyImg,health);
         arrEnemies.push(enemie);
       } 
       return true;
@@ -214,16 +214,58 @@ function drawEnemies(){
         }
         let count = enemie.render();
         if(count < 300){
-            enemie.walk("../images/enemy-walk.png");
-            enemie.update();
-            //drawArrowBackEnemy();
+            enemie.walk("../images/enemy-walk_v2.png");
+            if(arrArrowFront.length > 0){
+                arrArrowFront.forEach((arrowFront, index_arrowFront)=> {
+                    if(enemie.collision(arrowFront)){
+                        arrArrowFront.splice(index_arrowFront,1)
+                        let daño = enemie.healthEnemy(arrowFront.damage);
+                        if(daño <= 0){
+                            arrEnemies.splice(enemie_index,1)
+                        }else{
+                            console.log("Se daño al enemigo con flecha caminando y tiene una salud de:", daño)
+                        }
+                    }else{
+                        enemie.update();
+                    }
+                })
+            }else if(arrSpearFront.length > 0){
+                arrSpearFront.forEach((spearFront, index_spearFront) => {
+                    if(enemie.collision(spearFront)){
+                        arrSpearFront.splice(index_spearFront,1);
+                        let daño = enemie.healthEnemy(spearFront.damage);
+                        if(daño <= 0){
+                            arrEnemies.splice(enemie_index,1);
+                        }else {
+                            console.log("Se daño al enemigo con lanza caminando y tiene una salud de:", daño)
+                        }
+                    }else{
+                        enemie.update();
+                    }
+                })
+            }else if(arrMacuahuitlFront.length == 1){
+                arrMacuahuitlFront.forEach((macFront,index_macFront)=>{
+                    if(enemie.collision(macFront)){
+                        arrMacuahuitlFront.splice(index_macFront);
+                        let daño = enemie.healthEnemy(macFront.damage);
+                        if(daño <= 0){
+                            arrEnemies.splice(enemie_index,1);
+                        }else{
+                            console.log("Se daño al enemigo con macahuitl caminando y tiene una salud de:", daño)
+                        }
+                    }else{
+                        enemie.update();
+                    }
+                })
+            }else{
+                enemie.update();
+            }  
         }else{
-            enemie.attack("../images/enemigo-arco.png");
+            enemie.attack("../images/enemigo-arco_v2.png");
             enemie.update();
             if(count >= 323 && count < 324){
             generaArrowBackEnemy(enemie);
             }
-            //drawArrowBackEnemy();
         }
     })
 }

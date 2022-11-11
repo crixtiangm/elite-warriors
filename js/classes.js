@@ -428,10 +428,20 @@ class Enemy {
         return this.count;
     }
 
-    myHealth(attack, health){
-        health = this.health - attack;
-        return health;
+    healthEnemy(damage){
+        this.health = this.health - damage;
+        return this.health;
     }
+
+    collision(item){
+        return(
+            this.x + 155 < (item.x + 35) + item.width/2 &&
+            this.x + 180 > (item.x + 35) &&
+            this.y < item.y + item.height &&
+            this.y + this.height > item.y
+            )
+    }
+
 }
 
 
@@ -455,6 +465,15 @@ class Arrow {
     updateArrowBack(){
         this.x -= 4;
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+
+    collision(item){
+        return(
+            this.x + 35 < (item.x + 155) + item.width/2 &&
+            this.x + 135 > (item.x + 155) &&
+            this.y < item.y + item.height &&
+            this.y + this.height > item.y
+            )
     }
 }
 
