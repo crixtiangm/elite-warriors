@@ -108,10 +108,7 @@ class Background {
         this.width = w;
         this.heigth = h;
         //img
-        this.image = new Image();//Mando a llamar la clase nativa de image
-        //Image = {src:"", onload()...}
-        //../ salimos un nivel
-        //./ en el mismo nivel
+        this.image = new Image();
         this.image.src = "../images/Escenario-final.png"
     }
 
@@ -119,7 +116,7 @@ class Background {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.heigth);
         ctx.drawImage(
             this.image,
-            this.x + this.width,//  coloque la imagen 2 despues de la imagen 1
+            this.x + this.width,
             this.y,
             this.width,
             this.heigth
@@ -211,7 +208,7 @@ class Luna extends Animacion {
 
 class Aguila extends Animacion {
     
-    constructor(x,y,context,w,h,image,health){
+    constructor(x,y,context,w,h,image,health,points){
         super({
             context: context,
             image: image,
@@ -228,6 +225,7 @@ class Aguila extends Animacion {
         this.vy = 2 //gravity
         this.userPull = 0;
         this.health = health;
+        this.points = points;
     }
     
     walkFront(path){
@@ -296,20 +294,20 @@ class Aguila extends Animacion {
 
         this.context.drawImage(
             this.image,
-            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
-            this.row * this.height, // The y-axis coordinate of the top left corner
-            this.width, // The width of the sub-rectangle
-            this.height, // The height of the sub-rectangle
-            this.x, // The x coordinate
-            this.y,// The y coordinate
-            this.width, // The width to draw the image
-            this.height // The width to draw the image
+            this.frameIndex * this.width, 
+            this.row * this.height, 
+            this.width, 
+            this.height,
+            this.x,
+            this.y,
+            this.width,
+            this.height
         );
     }
 
     renderSkipDown(){
         this.vy = this.vy + (gravity - this.userPull);
-        //validamos si el Flappy no salga de canvas
+
         if(this.y >= 430){
             this.userPull = 0;
             this.y = 428;
@@ -317,26 +315,28 @@ class Aguila extends Animacion {
         }
         this.y += this.vy;
         //modificar su "Y" con la gravedad
-        /* if(this.y <= 380){
-            this.y += this.vy;
-        } */
 
         this.context.drawImage(
             this.image,
-            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
-            this.row * this.height, // The y-axis coordinate of the top left corner
-            this.width, // The width of the sub-rectangle
-            this.height, // The height of the sub-rectangle
-            this.x, // The x coordinate
-            this.y,// The y coordinate
-            this.width, // The width to draw the image
-            this.height // The width to draw the image
+            this.frameIndex * this.width, 
+            this.row * this.height, 
+            this.width, 
+            this.height, 
+            this.x, 
+            this.y,
+            this.width, 
+            this.height 
         );
     }
 
     daño(damage){
         this.health = this.health - damage;
         return this.health;
+    }
+
+    pointsWin(puntos){
+        this.points = this.points +  puntos;
+        return this.points;
     }
 
     collision(item){
@@ -400,26 +400,26 @@ class Enemy {
         this.x --;
         this.context.drawImage(
             this.image,
-            this.frameIndex * this.width, // The x-axis coordinate of the top left corner
-            this.row * this.height, // The y-axis coordinate of the top left corner
-            this.width, // The width of the sub-rectangle
-            this.height, // The height of the sub-rectangle
-            this.x, // The x coordinate
-            this.y,// The y coordinate
-            this.width, // The width to draw the image
-            this.height // The width to draw the image
+            this.frameIndex * this.width, 
+            this.row * this.height, 
+            this.width, 
+            this.height, 
+            this.x, 
+            this.y,
+            this.width, 
+            this.height 
         );
         }else if(this.count >= 300 && this.count < 325){
             this.context.drawImage(
                 this.image,
-                this.frameIndex * this.width, // The x-axis coordinate of the top left corner
-                this.row * this.height, // The y-axis coordinate of the top left corner
-                this.width, // The width of the sub-rectangle
-                this.height, // The height of the sub-rectangle
-                this.x, // The x coordinate
-                this.y,// The y coordinate
-                this.width, // The width to draw the image
-                this.height // The width to draw the image
+                this.frameIndex * this.width, 
+                this.row * this.height, 
+                this.width, 
+                this.height, 
+                this.x, 
+                this.y,
+                this.width, 
+                this.height 
             );
             
         }else{
@@ -518,5 +518,86 @@ class Macuahuitl {
 
     updateMacuahuitlBack(){
         ctx.drawImage(this.image,this.x,this.y,this.width,this.height)
+    }
+}
+
+class Weapon extends Animacion{
+    constructor(x,y,context,w,h,image){
+        super({
+            context: context,
+            image: image,
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            frameIndex: 0,
+            row: 0,
+            tickCount:0,
+            ticksPerFrame: 30,
+            frames: 1
+        });
+    }
+
+    macuahuitl(){
+        this.row = 0;
+    }
+
+    arrow(){
+        this.row = 1;
+    }
+
+    spear(){
+        this.row = 2;
+    }
+
+}
+
+class HealthWarrior extends Animacion {
+    constructor(x,y,context,w,h,image){
+        super({
+            context: context,
+            image: image,
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            frameIndex: 0,
+            row: 0,
+            tickCount:0,
+            ticksPerFrame: 30,
+            frames: 1
+        });
+    }
+
+    healthFull(){
+        this.row = 0;
+    }
+
+    healthH6(){
+        this.row = 1;
+    }
+
+    healthH5(){
+        this.row = 2;
+    }
+
+    healthH4(){
+        this.row = 3;
+    }
+
+    healthH3(){
+        this.row = 4;
+    }
+
+    healthH2(){
+        this.row = 5;
+    }
+
+    healthH1(){
+        this.row = 6;
+    }
+
+    healthH0(){
+        this.row = 7;
     }
 }

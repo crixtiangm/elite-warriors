@@ -3,10 +3,16 @@ image.src = "../images/walk-front.png";
 const bgImage = new Image();
 const imageLuna = new Image();
 imageLuna.src = "../images/Luna.png";
+const imgWeapon = new Image();
+imgWeapon.src = "../images/seleccion-de-arma.png";
+const imgHealth = new Image();
+imgHealth.src = "../images/health.png"
 const bg = new Background(canvas.width,canvas.height)
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
-const aguila = new Aguila(-100,430,ctx,379,160,image,200);
+const aguila = new Aguila(-100,430,ctx,379,160,image,210,0);
+const weapon = new Weapon(20,650,ctx,96,35,imgWeapon)
+const healthWarrior = new HealthWarrior(10,10,ctx,180,22,imgHealth);
 
 window.onload = function() {
     document.getElementById("start-button").onclick = function() {
@@ -52,6 +58,9 @@ function updateGame() {
     if(arrArrowEnemy.length > 0){
         drawArrowBackEnemy();
     }
+    weapon.render();
+    healthWarrior.render();
+    drawPoints();
     if(requestId){
         requestAnimationFrame(updateGame);
     }
@@ -59,22 +68,22 @@ function updateGame() {
 
 function gameOver(){
     console.log("Se murio")
-    requestId = undefined;
+    requestId = false;
 }
 
 function attackFront() {
-    attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
-    if(attackStatus){                    //Mientras no devuelva false se ejecutara todo el ciclo              
-        if(requestId){
-            requestAnimationFrame(attackFront);
+    if(requestId){
+        attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
+        if(attackStatus){                    //Mientras no devuelva false se ejecutara todo el ciclo              
+               requestAnimationFrame(attackFront);
         }
     }
 }
 
 function attackBack() {
-    attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
-    if(attackStatus){                     //Mientras no devuelva false se ejecutara todo el ciclo
-        if(requestId){
+    if(requestId){
+        attackStatus = aguila.updateAttack(); //Hacemos que recorra todos los Frames para dar el efecto de que con un solo tecleo hace un ataque
+        if(attackStatus){                     //Mientras no devuelva false se ejecutara todo el ciclo
             requestAnimationFrame(attackBack);
         }
     }
@@ -129,7 +138,7 @@ function generaArrowBack(){
 }
 
 function generaArrowBackEnemy(enemie){
-    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 62,"../images/arrow-enemy.png",40);
+    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 62,"../images/arrow-enemy.png",30);
     arrArrowEnemy.push(arrowEnemyBack);
 }
 
@@ -179,9 +188,27 @@ function drawArrowBackEnemy(){
             arrArrowEnemy.splice(flecha_index,1);
             let daño = aguila.daño(flecha.damage)
             if(daño <= 0){
+                healthWarrior.healthH0();
                 gameOver()
             }else{
-                console.log(daño);
+                switch(daño){
+                    case 180:
+                        healthWarrior.healthH6();
+                        break;
+                    case 150:
+                        healthWarrior.healthH5();
+                        break;
+                    case 120:
+                        healthWarrior.healthH4();
+                        break;
+                    case 90:
+                        healthWarrior.healthH3();
+                        break;
+                    case 60:
+                        healthWarrior.healthH2();
+                    case 30:
+                        healthWarrior.healthH1();
+                }
             }
         }else{
             flecha.updateArrowBack();
@@ -221,9 +248,10 @@ function drawEnemies(){
                         arrArrowFront.splice(index_arrowFront,1)
                         let daño = enemie.healthEnemy(arrowFront.damage);
                         if(daño <= 0){
-                            arrEnemies.splice(enemie_index,1)
+                            arrEnemies.splice(enemie_index,1);
+                            points = aguila.pointsWin(30);
                         }else{
-                            console.log("Se daño al enemigo con flecha caminando y tiene una salud de:", daño)
+                            console.log("Se daño al enemigo con flecha caminando y tiene una salud de:", daño);
                         }
                     }else{
                         enemie.update();
@@ -236,8 +264,9 @@ function drawEnemies(){
                         let daño = enemie.healthEnemy(spearFront.damage);
                         if(daño <= 0){
                             arrEnemies.splice(enemie_index,1);
+                            points = aguila.pointsWin(40);
                         }else {
-                            console.log("Se daño al enemigo con lanza caminando y tiene una salud de:", daño)
+                            console.log("Se daño al enemigo con lanza caminando y tiene una salud de:", daño);
                         }
                     }else{
                         enemie.update();
@@ -250,8 +279,9 @@ function drawEnemies(){
                         let daño = enemie.healthEnemy(macFront.damage);
                         if(daño <= 0){
                             arrEnemies.splice(enemie_index,1);
+                            points = aguila.pointsWin(50);
                         }else{
-                            console.log("Se daño al enemigo con macahuitl caminando y tiene una salud de:", daño)
+                            console.log("Se daño al enemigo con macahuitl caminando y tiene una salud de:", daño);
                         }
                     }else{
                         enemie.update();
@@ -268,6 +298,14 @@ function drawEnemies(){
             }
         }
     })
+}
+
+function drawPoints(){
+    ctx.font = "bold 32px serif";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.fillStyle = "black";
+    ctx.fillText(`Points: ${points}`,205,30)
 }
 
 
@@ -292,6 +330,9 @@ function walkFront() {
             if(arrArrowEnemy.length > 0){
                 drawArrowBackEnemy();
             }
+            weapon.render();
+            healthWarrior.render();
+            drawPoints();
             if(requestId){
                 requestAnimationFrame(walkFront);
             }
@@ -314,6 +355,9 @@ function walkFront() {
             if(arrArrowEnemy.length > 0){
                 drawArrowBackEnemy();
             }
+            weapon.render();
+            healthWarrior.render();
+            drawPoints();
             if(requestId){
                 requestAnimationFrame(walkFront);
             }
@@ -344,6 +388,9 @@ function walkBack() {
             if(arrArrowEnemy.length > 0){
                 drawArrowBackEnemy();
             }
+            weapon.render();
+            healthWarrior.render();
+            drawPoints();
             if(requestId){
                 requestAnimationFrame(walkBack);
             }
@@ -365,6 +412,9 @@ function walkBack() {
             if(arrArrowEnemy.length > 0){
                 drawArrowBackEnemy();
             }
+            weapon.render();
+            healthWarrior.render();
+            drawPoints();
             if(requestId){
                 requestAnimationFrame(walkBack);
             }
@@ -468,6 +518,7 @@ addEventListener("keydown", (event)=>{
                     }else{
                         aguila.walkFront(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
                     }
+                    weapon.arrow();
                     break;
                 case 2:
                     if(keyPres == 39){
@@ -475,6 +526,7 @@ addEventListener("keydown", (event)=>{
                     }else{
                         aguila.walkFront(weaponImages[selectorWeapon].walkBack,weaponImages[selectorWeapon].width);
                     }
+                    weapon.spear();
                     break;
                 default:
                     selectorWeapon = 0;
@@ -483,6 +535,7 @@ addEventListener("keydown", (event)=>{
                     }else{
                         aguila.walkFront(weaponImages[0].walkBack,weaponImages[selectorWeapon].width);
                     }
+                    weapon.macuahuitl();
                     break;
             }
         }

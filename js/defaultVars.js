@@ -3,6 +3,7 @@ const ctx = canvas.getContext('2d');
 
 let frames = 0;
 let requestId;
+let points = 0;
 
 const arrArrowFront = [];
 const arrArrowBack = [];
