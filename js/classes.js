@@ -146,6 +146,31 @@ class Background {
     }
 }
 
+class Instructions {
+    constructor(w,h){
+        //las posiciones son parte de los atributos de esta clase
+        //x,y,w,h
+        this.x = 0;
+        this.y = 0;
+        this.width = w;
+        this.heigth = h;
+        //img
+        this.image = new Image();
+        this.image.src = "../images/bg-instructions.png"
+    }
+
+    render(){
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.heigth);
+        ctx.drawImage(
+            this.image,
+            this.x + this.width,
+            this.y,
+            this.width,
+            this.heigth
+        )
+    }
+}
+
 
 class Nubes {
     constructor(w,h){

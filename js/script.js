@@ -1,27 +1,42 @@
 const image = new Image();
 image.src = "../images/walk-front.png";
-const bgImage = new Image();
 const imageLuna = new Image();
 imageLuna.src = "../images/Luna.png";
 const imgWeapon = new Image();
 imgWeapon.src = "../images/seleccion-de-arma.png";
 const imgHealth = new Image();
-imgHealth.src = "../images/health.png"
+imgHealth.src = "../images/health.png";
 const imgGameOver = new Image();
-imgGameOver.src = "../images/game-over.png"
-const bg = new Background(canvas.width,canvas.height)
+imgGameOver.src = "../images/game-over.png";
+const bg = new Background(canvas.width,canvas.height);
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
 const aguila = new Aguila(-100,430,ctx,379,160,image,210,0);
 const weapon = new Weapon(20,650,ctx,96,35,imgWeapon)
 const healthWarrior = new HealthWarrior(10,10,ctx,180,22,imgHealth);
 const theGameOver = new GameOver(576,275,ctx,252,141,imgGameOver);
+const bgInstructions = new Instructions(canvas.width,canvas.height);
 
 window.onload = function() {
     document.getElementById("start-button").onclick = function() {
+        requestInstructionsId = undefined;
         startGame();
       };
+    document.getElementById("instructions-button").onclick = function() {
+        startInstructions();
+    };
 }
+
+function startInstructions(){
+    if(!requestInstructionsId){
+       requestInstructionsId = requestAnimationFrame(updateInstrucciones);
+    }
+}
+
+function updateInstrucciones(){
+    bgInstructions.render();
+}
+
 
 function startGame() {
     if(!requestId){
@@ -64,6 +79,9 @@ function updateGame() {
     weapon.render();
     healthWarrior.render();
     drawPoints();
+    if(requestYouWind){
+        drawYouWin();
+    }
     if(requestId){
         requestAnimationFrame(updateGame);
     }
@@ -71,8 +89,15 @@ function updateGame() {
 
 function gameOver(){
     theGameOver.render();
-    requestId = false;
+    requestId = undefined;
 }
+
+function youWin(){
+    requestYouWind = true;
+    requestId = undefined;
+}
+
+
 
 function attackFront() {
     if(requestId){
@@ -310,8 +335,18 @@ function drawPoints(){
     ctx.lineWidth = 2;
     ctx.fillStyle = "black";
     ctx.fillText(`Points: ${points}`,205,30)
+    if(points > 200){
+        youWin();
+    }
 }
 
+function drawYouWin(){
+    ctx.font = "bold 96px serif";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.fillStyle = "black";
+    ctx.fillText(`YOU WIN`,450,350)
+}
 
 function walkFront() {
     walkStatus = aguila.updateWalk();
@@ -542,6 +577,8 @@ addEventListener("keydown", (event)=>{
                     weapon.macuahuitl();
                     break;
             }
+        }else if(event.keyCode === 87){
+            drawYouWin();
         }
   })
 
@@ -550,3 +587,5 @@ addEventListener("keyup", (event)=>{
        statusEnemies = false;
     }
   })
+
+

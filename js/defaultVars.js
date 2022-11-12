@@ -3,7 +3,9 @@ const ctx = canvas.getContext('2d');
 
 let frames = 0;
 let requestId;
+let requestYouWind = false;
 let points = 0;
+let requestInstructionsId;
 
 const arrArrowFront = [];
 const arrArrowBack = [];

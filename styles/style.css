@@ -1,13 +1,19 @@
 body {
     text-align: center;
     width: 100%;
+    background-color:gray;
+  }
+
+  .game {
+    display: flex;
+    justify-content:space-around;
   }
 
   #game-board {
     width: 1400px;
     height: 700px;
     border: 1px solid black;
-    margin: 0 100px 0px 200px;
+    margin: 100px 0px 0px 0px;
   }
 
   
