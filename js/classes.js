@@ -601,3 +601,21 @@ class HealthWarrior extends Animacion {
         this.row = 7;
     }
 }
+
+class GameOver extends Animacion {
+    constructor(x,y,context,w,h,image){
+        super({
+            context: context,
+            image: image,
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            frameIndex: 0,
+            row: 0,
+            tickCount:0,
+            ticksPerFrame: 30,
+            frames: 1
+        });
+    }
+}

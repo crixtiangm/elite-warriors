@@ -7,12 +7,15 @@ const imgWeapon = new Image();
 imgWeapon.src = "../images/seleccion-de-arma.png";
 const imgHealth = new Image();
 imgHealth.src = "../images/health.png"
+const imgGameOver = new Image();
+imgGameOver.src = "../images/game-over.png"
 const bg = new Background(canvas.width,canvas.height)
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
 const aguila = new Aguila(-100,430,ctx,379,160,image,210,0);
 const weapon = new Weapon(20,650,ctx,96,35,imgWeapon)
 const healthWarrior = new HealthWarrior(10,10,ctx,180,22,imgHealth);
+const theGameOver = new GameOver(576,275,ctx,252,141,imgGameOver);
 
 window.onload = function() {
     document.getElementById("start-button").onclick = function() {
@@ -67,7 +70,7 @@ function updateGame() {
 }
 
 function gameOver(){
-    console.log("Se murio")
+    theGameOver.render();
     requestId = false;
 }
 
@@ -187,28 +190,29 @@ function drawArrowBackEnemy(){
         if(aguila.collision(flecha)){
             arrArrowEnemy.splice(flecha_index,1);
             let daño = aguila.daño(flecha.damage)
-            if(daño <= 0){
-                healthWarrior.healthH0();
-                gameOver()
-            }else{
-                switch(daño){
-                    case 180:
-                        healthWarrior.healthH6();
-                        break;
-                    case 150:
-                        healthWarrior.healthH5();
-                        break;
-                    case 120:
-                        healthWarrior.healthH4();
-                        break;
-                    case 90:
-                        healthWarrior.healthH3();
-                        break;
-                    case 60:
-                        healthWarrior.healthH2();
-                    case 30:
-                        healthWarrior.healthH1();
-                }
+            switch(daño){
+                case 180:
+                    healthWarrior.healthH6();
+                    break;
+                case 150:
+                    healthWarrior.healthH5();
+                    break;
+                case 120:
+                    healthWarrior.healthH4();
+                    break;
+                case 90:
+                    healthWarrior.healthH3();
+                    break;
+                case 60:
+                    healthWarrior.healthH2();
+                    break;
+                case 30:
+                    healthWarrior.healthH1();
+                    break;
+                default:
+                    healthWarrior.healthH0();
+                    gameOver();
+                    break
             }
         }else{
             flecha.updateArrowBack();
