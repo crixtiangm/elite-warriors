@@ -109,7 +109,7 @@ class Background {
         this.heigth = h;
         //img
         this.image = new Image();
-        this.image.src = "../images/Escenario-final.png"
+        this.image.src = "images/Escenario-final.png"
     }
 
     render(){
@@ -156,7 +156,7 @@ class Instructions {
         this.heigth = h;
         //img
         this.image = new Image();
-        this.image.src = "../images/bg-instructions.png"
+        this.image.src = "images/bg-instructions.png"
     }
 
     render(){
@@ -179,7 +179,7 @@ class Nubes {
         this.width = w;
         this.heigth = h;
         this.image = new Image();
-        this.image.src = '../images/Nubes.png';
+        this.image.src = 'images/Nubes.png';
     }
 
     render(){

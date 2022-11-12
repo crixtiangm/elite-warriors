@@ -1,13 +1,13 @@
 const image = new Image();
-image.src = "../images/walk-front.png";
+image.src = "images/walk-front.png";
 const imageLuna = new Image();
-imageLuna.src = "../images/Luna.png";
+imageLuna.src = "images/Luna.png";
 const imgWeapon = new Image();
-imgWeapon.src = "../images/seleccion-de-arma.png";
+imgWeapon.src = "images/seleccion-de-arma.png";
 const imgHealth = new Image();
-imgHealth.src = "../images/health.png";
+imgHealth.src = "images/health.png";
 const imgGameOver = new Image();
-imgGameOver.src = "../images/game-over.png";
+imgGameOver.src = "images/game-over.png";
 const bg = new Background(canvas.width,canvas.height);
 const bgLuna = new Luna(-250,-250,ctx,641,636,imageLuna);
 const bgNubes = new Nubes(canvas.width, canvas.height);
@@ -118,17 +118,17 @@ function attackBack() {
 }
 
 function generaArrowFront(){
-    const arrowFront = new Arrow(aguila.x + 170, aguila.y + 50,"../images/flecha-front.png",30);
+    const arrowFront = new Arrow(aguila.x + 170, aguila.y + 50,"images/flecha-front.png",30);
     arrArrowFront.push(arrowFront);
 }
 
 function generaSpearFront(){
-    const spearFront = new Spears(aguila.x + 170, aguila.y + 22, "../images/lanza-front.png",40)
+    const spearFront = new Spears(aguila.x + 170, aguila.y + 22, "images/lanza-front.png",40)
     arrSpearFront.push(spearFront);
 }
 
 function generaMacuahuitlFront(){
-    const macuahuitlFront = new Macuahuitl(aguila.x + 180, aguila.y + 50, "../images/macuahuitl-front.png", 50)
+    const macuahuitlFront = new Macuahuitl(aguila.x + 180, aguila.y + 50, "images/macuahuitl-front.png", 50)
     arrMacuahuitlFront.push(macuahuitlFront);
 }
 
@@ -161,22 +161,22 @@ function drawMacuahuitlFront(){
 }
 
 function generaArrowBack(){
-    const arrowBack = new Arrow(aguila.x + 30, aguila.y + 50,"../images/flecha-back.png",30);
+    const arrowBack = new Arrow(aguila.x + 30, aguila.y + 50,"images/flecha-back.png",30);
     arrArrowBack.push(arrowBack);
 }
 
 function generaArrowBackEnemy(enemie){
-    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 62,"../images/arrow-enemy.png",30);
+    const arrowEnemyBack = new Arrow(enemie.x-50,enemie.y + 62,"images/arrow-enemy.png",30);
     arrArrowEnemy.push(arrowEnemyBack);
 }
 
 function generaSpearBack(){
-    const spearFront = new Spears(aguila.x + 30, aguila.y + 23, "../images/lanza-back.png",40)
+    const spearFront = new Spears(aguila.x + 30, aguila.y + 23, "images/lanza-back.png",40)
     arrSpearBack.push(spearFront);
 }
 
 function generaMacuahuitlBack(){
-    const macuahuitlBack = new Macuahuitl(aguila.x + 30, aguila.y + 50, "../images/macuahuitl-back-attack.png", 50)
+    const macuahuitlBack = new Macuahuitl(aguila.x + 30, aguila.y + 50, "images/macuahuitl-back-attack.png", 50)
     arrMacuahuitlBack.push(macuahuitlBack);
 } 
 
@@ -253,7 +253,7 @@ function drawArrowBackEnemy(){
 function generaEnemies(){
     if((frames % 100 === 0) && statusEnemies){
         const enemyImg = new Image();
-        enemyImg.src =  "../images/enemy-walk_v2.png";
+        enemyImg.src =  "images/enemy-walk_v2.png";
         let health = Math.floor(Math.random()*150);
         const enemie = new Enemy(canvas.width,455,ctx,380,130,enemyImg,health);
         arrEnemies.push(enemie);
@@ -270,7 +270,7 @@ function drawEnemies(){
         }
         let count = enemie.render();
         if(count < 300){
-            enemie.walk("../images/enemy-walk_v2.png");
+            enemie.walk("images/enemy-walk_v2.png");
             if(arrArrowFront.length > 0){
                 arrArrowFront.forEach((arrowFront, index_arrowFront)=> {
                     if(enemie.collision(arrowFront)){
@@ -320,7 +320,7 @@ function drawEnemies(){
                 enemie.update();
             }  
         }else{
-            enemie.attack("../images/enemigo-arco_v2.png");
+            enemie.attack("images/enemigo-arco_v2.png");
             enemie.update();
             if(count >= 323 && count < 324){
             generaArrowBackEnemy(enemie);
